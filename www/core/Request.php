@@ -45,4 +45,33 @@ class Request
     {
         return $_SERVER['REQUEST_URI'];
     }
+
+    public function getBaseUrl()
+    {
+        $script_name = $_SERVER['SCRIPT_NAME'];
+        $request_uri = $this->getRequestUri();
+
+        if (strpos($request_uri, $script_name) === 0) {
+            return $script_name;
+        } elseif (strpos($request_uri, dirname($script_name)) === 0) {
+            return rtrim(dirname($script_name), '/');
+        }
+
+        return '';
+    }
+
+    public function getPathInfo()
+    {
+        $base_url = $this->getBaseUrl();
+        $request_uri = $this->getRequestUri();
+
+        $pos = strpos($request_uri, '?');
+        if ($pos !== false) {
+            $request_uri = substr($request_uri, 0, $pos);
+        }
+
+        $path_info = substr($request_uri, strlen($base_url));
+
+        return $path_info;
+    }
 }
