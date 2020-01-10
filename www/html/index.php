@@ -4,6 +4,7 @@ require '../bootstrap.php';
 
 use core\Router;
 use core\Request;
+use core\Response;
 
 $request = new Request();
 
@@ -14,4 +15,7 @@ $router = new Router([
 ]);
 
 $result = $router->resolve($request->getPathInfo());
-var_dump($result);
+$response = new Response();
+
+$response->setContent($result);
+$response->send();
