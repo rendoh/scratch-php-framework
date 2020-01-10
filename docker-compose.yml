@@ -3,9 +3,9 @@ services:
   mysql:
     build: ./mysql
     environment:
-      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_ROOT_PASSWORD: secret
     volumes:
-      - db:/var/lib/mysql
+      - ./db:/var/lib/mysql
   php:
     build: ./php
     ports:

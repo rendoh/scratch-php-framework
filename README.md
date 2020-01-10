@@ -5,9 +5,15 @@
 ## Setup
 
 ```bash
-docker-compose up -d --build
+$ docker-compose up -d --build
 ```
 
 - PHP 7.0
 - Composer
 - MySQL 5.7
+
+```bash
+$ docker exec -it PHP_CONTAINER_NAME /bin/bash
+$ cd /var/www
+$ composer install
+```
