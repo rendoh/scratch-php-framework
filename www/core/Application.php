@@ -72,6 +72,11 @@ abstract class Application
         return $this->db_manager;
     }
 
+    public function getViewDir()
+    {
+        return $this->getRootDir().'/views';
+    }
+
     public function getDocumentRootDir()
     {
         return $this->getRootDir().'/html';
