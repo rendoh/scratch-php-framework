@@ -12,6 +12,8 @@ class Controller
     protected $session;
     protected $db_manager;
 
+    const CSRF_PREFIX = 'csrf_tokens/';
+
     public function __construct($application)
     {
         $this->controller_name = strtolower(substr(get_class($this), 0, -10));
@@ -72,5 +74,37 @@ class Controller
 
         $this->response->setStatusCode(302, 'Found');
         $this->response->setHttpHeader('Location', $url);
+    }
+
+    protected function generateCsrfToken($form_name)
+    {
+        $key = self::CSRF_PREFIX.$form_name;
+        $tokens = $this->session->get($key, []);
+        if (count($tokens) >= 10) {
+            array_shift($tokens);
+        }
+
+        $token = bin2hex(openssl_random_pseudo_bytes(16));
+        $tokens[] = $token;
+
+        $this->session->set($key, $tokens);
+
+        return $token;
+    }
+
+    protected function checkCsrfToken($form_name, $token)
+    {
+        $key = self::CSRF_PREFIX.$form_name;
+        $tokens = $this->session->get($key, []);
+
+        $pos = array_search($token, $tokens, true);
+        if ($pos !== false) {
+            unset($tokens[$pos]);
+            $this->session->set($key, $tokens);
+
+            return true;
+        }
+
+        return false;
     }
 }
