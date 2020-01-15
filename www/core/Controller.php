@@ -11,6 +11,7 @@ class Controller
     protected $response;
     protected $session;
     protected $db_manager;
+    protected $auth_actions = [];
 
     const CSRF_PREFIX = 'csrf_tokens/';
 
@@ -31,6 +32,10 @@ class Controller
         $action_method = $action.'Action';
         if (!method_exists($this, $action_method)) {
             $this->forward404();
+        }
+
+        if ($this->needsAuthentication($action) && !$this->session->isAuthenticated()) {
+            throw new UnauthorizedActionException();
         }
 
         $content = $this->$action_method($params);
