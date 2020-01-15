@@ -5,5 +5,8 @@
       "controllers\\": "controllers",
       "models\\": "models"
     }
+  },
+  "require": {
+    "vlucas/phpdotenv": "^4.1"
   }
 }
